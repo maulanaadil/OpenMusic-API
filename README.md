@@ -15,7 +15,7 @@ npm install
 👤 **Maulana Adil**
 
 * Github: [@maulanaadil](https://github.com/maulanaadil)
-* LinkedIn: [@Maulana Adil](https://linkedin.com/in/Maulana Adil)
+* LinkedIn: [@Maulana Adil](https://linkedin.com/in/MaulanaAdil)
 
 ## Show your support
 
