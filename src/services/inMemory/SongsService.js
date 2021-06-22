@@ -7,7 +7,7 @@ class SongsService {
     this._songs = [];
   }
 
-  addNote({
+  addSong({
     title, year, performer, genre, duration,
   }) {
     const id = nanoid(16);

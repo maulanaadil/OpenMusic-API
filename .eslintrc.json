@@ -13,6 +13,9 @@
     "rules": {
         "no-console": "off",
         "no-underscore-dangle": "off",
-        "indent": "off"
+        "indent": "off",
+        "no-unused-vars": "off",
+        "camelcase": "off",
+        "no-shadow": "off"
     }
 }
