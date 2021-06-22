@@ -2,3 +2,4 @@
 .prod.env
 .idea
 node_modules
+test.http
