@@ -2,6 +2,8 @@
 
 exports.shorthands = undefined;
 
-exports.up = pgm => {};
+exports.up = (pgm) => {
+    pgm.renameTable('playlist', 'playlists');
+};
 
-exports.down = pgm => {};
+exports.down = (pgm) => {};

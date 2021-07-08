@@ -1,0 +1,42 @@
+
+### CREATE DATA
+POST http://localhost:5000/songs
+Content-Type: application/json
+Accept: application/json
+
+{
+    "title": "Maulana Adil",
+    "year": 2001,
+    "performer": "Unikom",
+    "genre": "R&B",
+    "duration": 200
+}
+
+### GET DATA
+GET http://localhost:5000/songs
+Content-Type: application/json
+Accept: application/json
+
+### GET DATA BY ID
+GET http://localhost:5000/songs/VLjzNwiaN4H_czeF
+Content-Type: application/json
+Accept: application/json
+
+### UPDATE DATA BY ID
+PUT http://localhost:5000/songs/viGD-lChx8PRrQlw
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Natasya Nurhaliza",
+  "year": 2001,
+  "performer": "UNPAS",
+  "genre": "R&B",
+  "duration": 200
+}
+
+### DELETE DAYA BY ID
+DELETE http://localhost:5000/songs/song-DcTQUOuilcUzDvGk
+Content-Type: application/json
+Accept: application/json
+
