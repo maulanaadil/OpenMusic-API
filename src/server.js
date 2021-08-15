@@ -29,6 +29,11 @@ const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./services/postgres/CollaborationsService');
 const CollaborationValidator = require('./validator/collaborations');
 
+// exports
+const _exports = require('./api/exports');
+const ProducerService = require('./services/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+
 const ClientError = require('./exceptions/ClientError');
 
 const init = async () => {
@@ -47,23 +52,6 @@ const init = async () => {
         origin: ['*'],
       },
     },
-  });
-
-  server.ext('onPreResponse', (request, h) => {
-    // mendapatkan konteks response dari request
-      const { response } = request;
-
-      if (response instanceof ClientError) {
-        const newResponse = h.response({
-          status: 'fail',
-          message: response.message,
-        });
-        newResponse.code(response.statusCode);
-        return newResponse;
-      }
-
-      // jika bukan ClientError, lanjutkan dengan response sebelumnya (tanpa terintervensi)
-      return response.continue || response;
   });
 
   // registrasi plugin Eksternal
@@ -127,6 +115,14 @@ const init = async () => {
         collaborationsService,
         playlistsService,
         validator: CollaborationValidator,
+      },
+    },
+    {
+      plugin: _exports,
+      options: {
+        playlistsService,
+        service: ProducerService,
+        validator: ExportsValidator,
       },
     },
   ]);
