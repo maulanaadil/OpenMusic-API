@@ -28,6 +28,7 @@
     "nanoid": "^3.1.23",
     "node-pg-migrate": "^5.10.0",
     "pg": "^8.6.0",
-    "readme-md-generator": "^1.0.0"
+    "readme-md-generator": "^1.0.0",
+    "redis": "^3.1.2"
   }
 }

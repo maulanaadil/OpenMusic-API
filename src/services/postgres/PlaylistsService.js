@@ -5,9 +5,10 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 const AuthorizationError = require('../../exceptions/AuthorizationError');
 
 class PlaylistsService {
-    constructor(collaborationsService) {
+    constructor(collaborationsService, cacheService) {
         this._pool = new Pool();
         this._collaborationsService = collaborationsService;
+        this._cacheService = cacheService;
     }
 
     async addPlaylist({
@@ -79,21 +80,28 @@ class PlaylistsService {
         if (!result.rows[0].id) {
             throw new InvariantError('Lagu gagal ditambahkan kedalam playlist.');
         }
+        await this._cacheService.delete(`playlist:${playlistId}`);
         return result.rows[0].id;
     }
 
     async getSongsFromPlaylist(playlistId) {
-        const query = {
-            text: `SELECT s.id, s.title, s.performer
+        try {
+            const result = await this._cacheService.get(`playlist:${playlistId}`);
+            return JSON.parse(result);
+        } catch (error) {
+            const query = {
+                text: `SELECT s.id, s.title, s.performer
                     FROM playlistsongs p
                     JOIN songs s on s.id = p.song_id
                     WHERE p.playlist_id = $1
                     GROUP BY p.song_id, s.id`,
-            values: [playlistId],
-        };
+                values: [playlistId],
+            };
 
-        const result = await this._pool.query(query);
-        return result.rows;
+            const result = await this._pool.query(query);
+            await this._cacheService.set(`playlist:${playlistId}`, JSON.stringify(result));
+            return result.rows;
+        }
     }
 
     async deleteSongFromPlaylist(playlistId, songId) {
@@ -106,6 +114,8 @@ class PlaylistsService {
         if (!result.rowCount) {
             throw new InvariantError('Lagu didalam playlist gagal dihapus. Id tidak ditemukan');
         }
+
+        await this._cacheService.delete(`playlist:${playlistId}`);
     }
 
     async verifyPlaylistAccess(playlistId, userId) {
