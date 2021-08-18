@@ -45,4 +45,3 @@ class UploadsHandler {
 }
 
 module.exports = UploadsHandler;
-
