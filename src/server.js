@@ -55,7 +55,6 @@ const init = async () => {
   const authenticationsService = new AuthenticationsService();
   const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/pictures'));
 
-
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -90,6 +89,26 @@ const init = async () => {
         id: artifacts.decoded.payload.id,
       },
     }),
+  });
+
+  server.ext('onPreResponse', (request, h) => {
+    // mendapatkan konteks response dari request
+    const { response } = request;
+
+
+    if (response instanceof ClientError) {
+      // membuat response baru dari response toolkit sesuai kebutuhan error handling
+      const newResponse = h.response({
+        status: 'fail',
+        message: response.message,
+      });
+      newResponse.code(response.statusCode);
+      return newResponse;
+    }
+
+
+    // jika bukan ClientError, lanjutkan dengan response sebelumnya (tanpa terintervensi)
+    return response.continue || response;
   });
 
 
@@ -145,7 +164,7 @@ const init = async () => {
       options: {
         service: storageService,
         validator: UploadsValidator,
-      }
+      },
     },
   ]);
 
